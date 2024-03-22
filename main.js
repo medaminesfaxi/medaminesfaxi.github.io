@@ -1,1 +1,74 @@
-let config={apiKey:"AIzaSyCz4xaQkKVSPo8F6ktduSp8vhk-UzuOvD4",authDomain:"portfolio-3658b.firebaseapp.com",databaseURL:"https://portfolio-3658b.firebaseio.com",projectId:"portfolio-3658b",storageBucket:"portfolio-3658b.appspot.com",messagingSenderId:"411755615899"};function printLetterByLetter(e,t,o){let l=0,n=setInterval(function(){document.getElementById(e).innerHTML+=t.charAt(l),++l>t.length&&clearInterval(n)},o)}firebase.initializeApp(config),window.onload=(()=>{let e=document.getElementById("form"),t=firebase.database().ref("messages");e.addEventListener("submit",o=>{o.preventDefault();let l=document.getElementById("notification"),n=e.elements.name.value,s=e.elements.email.value,a=e.elements.message.value;t.push().set({name:n,email:s,message:a}),l.style.top="0",setTimeout(()=>{l.style.top="-80px"},1100),document.getElementById("form").reset()}),setTimeout(function(){document.body.style.display="block",document.getElementById("boxes").style.display="none",document.getElementById("all").style.display="block",document.getElementById("scroll").addEventListener("click",()=>{scrollToElem("#contact")}),printLetterByLetter("lbl","I code beautifully simple things, and I love what I do.",85)},800)});const nativeSmoothScrollTo=e=>{window.scroll({behavior:"smooth",left:0,top:e.getBoundingClientRect().top+window.pageYOffset})},smoothScrollTo=(e,t)=>{const o=document.scrollingElement||document.documentElement,l=o.scrollTop,n=e-l,s=+new Date,a=i=>{const m=+new Date-s;o.scrollTop=parseInt(((e,t,o,l)=>(e/=l/2)<1?o/2*e*e+t:-o/2*(--e*(e-2)-1)+t)(m,l,n,t)),m<t?requestAnimationFrame(a):o.scrollTop=e};a()},supportsNativeSmoothScroll="scrollBehavior"in document.documentElement.style,scrollToElem=e=>{if(!e)return;const t=document.querySelector(e);t&&(supportsNativeSmoothScroll?nativeSmoothScrollTo(t):smoothScrollTo(t.offsetTop,600))};
+function printLetterByLetter(elementId, text, interval) {
+  let i = 0;
+  let intervalId = setInterval(function () {
+    document.getElementById(elementId).innerHTML += text.charAt(i);
+    ++i > text.length && clearInterval(intervalId);
+  }, interval);
+}
+
+window.onload = () => {
+  setTimeout(function () {
+    document.body.style.display = "block";
+    document.getElementById("boxes").style.display = "none";
+    document.getElementById("all").style.display = "block";
+    document.getElementById("scroll").addEventListener("click", () => {
+      scrollToElem("#contact");
+    });
+    printLetterByLetter(
+      "lbl",
+      "I code beautifully simple things, and I love what I do.",
+      65
+    );
+  }, 300);
+};
+
+const nativeSmoothScrollTo = (element) => {
+  window.scroll({
+    behavior: "smooth",
+    left: 0,
+    top: element.getBoundingClientRect().top + window.pageYOffset,
+  });
+};
+
+const smoothScrollTo = (element, duration) => {
+  const scrollElement = document.scrollingElement || document.documentElement;
+  const start = scrollElement.scrollTop;
+  const distance = element - start;
+  const startTime = +new Date();
+
+  const animateScroll = (currentTime) => {
+    const elapsedTime = currentTime - startTime;
+    scrollElement.scrollTop = parseInt(
+      elapsedTime / duration < 1
+        ? ((distance / 2) * elapsedTime * elapsedTime) / duration / duration +
+            start
+        : (-distance / 2) *
+            ((elapsedTime -= duration) * (elapsedTime - 2) - 1) +
+            start
+    );
+    if (elapsedTime < duration) {
+      requestAnimationFrame(animateScroll);
+    }
+  };
+
+  animateScroll(startTime);
+};
+
+const supportsNativeSmoothScroll =
+  "scrollBehavior" in document.documentElement.style;
+
+const scrollToElem = (element) => {
+  if (!element) return;
+  const targetElement = document.querySelector(element);
+  if (targetElement) {
+    if (supportsNativeSmoothScroll) {
+      nativeSmoothScrollTo(targetElement);
+    } else {
+      smoothScrollTo(targetElement.offsetTop, 600);
+    }
+  }
+};
+
+document.getElementById("theme-toggle").addEventListener("click", function () {
+  document.body.classList.toggle("dark-theme");
+});
